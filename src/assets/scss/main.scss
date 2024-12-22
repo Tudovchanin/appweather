@@ -1,0 +1,23 @@
+@use './helpers';
+@use './variables';
+@use './reset';
+@use './fonts';
+@use './mediaMixins';
+
+body {
+  // font-family: 'Merriweather', sans-serif;
+  // font-family: Arial, sans-serif;
+  font-family: Verdana, sans-serif;
+  font-family: "PT Sans", sans-serif;
+  // font-family: "Open Sans", sans-serif;
+
+// height: 100vh;
+overflow-x: hidden;
+// border: solid red;
+}
+
+#app {
+  // height: 100%;
+
+}
+
