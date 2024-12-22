@@ -96,7 +96,7 @@ const focus = ref<boolean>(false);
       cursor: pointer;
       transition: box-shadow 0.5s, transform 0.5s;
 
-      &:hover,
+      &:hover
        {
         transform: scaleX(0.96);
         -webkit-box-shadow: 0px 0px 8px 19px rgba(34, 60, 80, 0.2) inset;
