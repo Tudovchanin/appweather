@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 
 // Определяем пропсы для компонента, в данном случае только percent
 const props = defineProps<{

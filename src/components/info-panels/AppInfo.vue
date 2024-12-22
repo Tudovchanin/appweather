@@ -4,14 +4,11 @@ import { ref } from "vue";
 const searchCity = ref<string>("");
 
 const props = defineProps<{
-  city?: string;
   temp?: number;
   feels_like?: number;
   pressure?: number | null;
-
-  error?: null | string;
-  icon_description?: string;
   gusts_of_wind?: number | null;
+  error?: null | string;
 }>();
 
 const emit = defineEmits<{
@@ -41,16 +38,13 @@ const focus = ref<boolean>(false);
       <button class="app-info__form-btn" type="submit">Показать погоду</button>
     </form>
     <div class="container-detail-weather">
-      <p v-if="temp">Температура: {{ Math.round(temp) }}°C</p>
-      <p v-if="feels_like">Ощущается как: {{ Math.round(feels_like) }}°C</p>
-      <p v-if="pressure">Давление: {{ pressure }} мм.рт.ст</p>
-      <p v-if="gusts_of_wind">Порывы ветра: {{ gusts_of_wind }} м/c</p>
+      <p v-if="props.temp">Температура: {{ Math.round(props.temp) }}°C</p>
+      <p v-if="props.feels_like">Ощущается как: {{ Math.round(props.feels_like) }}°C</p>
+      <p v-if="props.pressure">Давление: {{ props.pressure }} мм.рт.ст</p>
+      <p v-if="props.gusts_of_wind">Порывы ветра: {{ props.gusts_of_wind }} м/c</p>
 
-      <p v-if="error">Ошибка: {{ error }}</p>
-      <!-- <div class="img-weather">
-      <img :src="'https://openweathermap.org/img/wn/'+ icon_description +'.png'" alt="картинка погода">
-      
-    </div> -->
+      <p v-if="props.error">Ошибка: {{ props.error }}</p>
+    
     </div>
   </div>
 </template>
