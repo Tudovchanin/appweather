@@ -206,8 +206,7 @@ function setVideoInVideoSrc() {
 
   if (weatherDescription) {
     if (isDaytime === "day" || isDaytime === "night") {
-      videoSrc.value = `/video/${weatherBg[isDaytime][weatherDescription] || "not_data.mp4"
-        }`;
+      videoSrc.value = `/video/${weatherBg[isDaytime][weatherDescription] || "not_data.mp4"}`;
     } else {
       videoSrc.value = "/video/not_data.mp4";
     }
@@ -347,7 +346,7 @@ onBeforeMount(async () => {
 
   &__date-time {
     display: flex;
-  
+
     gap: 40px;
     padding-left: 20px;
     padding-right: 20px;
