@@ -9,7 +9,7 @@
 
 
 ### Без SSL (HTTP)
-- [Спринт-хост](http://ваш-логин.sprint.host) - базовая версия без шифрования
+- [Спринт-хост](http://appweather.ru) - базовая версия без шифрования
 
 ### С SSL (HTTPS)
 - [AlwaysData](https://michdev.alwaysdata.net) - защищенная версия с HTTPS
