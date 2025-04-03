@@ -5,6 +5,9 @@
     "lib": ["ES2023"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "incremental": true, // Включите инкрементальную компиляцию
+
+
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -12,10 +15,6 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-
-
-    /* Добавьте эту строку */
-    "incremental": true, // Включите инкрементальную компиляцию
 
 
     /* Linting */

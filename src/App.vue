@@ -4,18 +4,6 @@ import { useWeatherStore } from "@/stores/weatherStore";
 import AppInfo from "@/components/info-panels/AppInfo.vue";
 import AppDiagram from "@/components/diagrams/AppDiagram.vue";
 
-const weather = useWeatherStore();
-
-
-const date = computed((): string => {
-  const weatherTime = weather.time as string | undefined;
-  return weatherTime ? weatherTime.split(", ")[0] : "Недоступно";
-});
-
-const time = computed((): string => {
-  const weatherTime = weather.time as string | undefined;
-  return weatherTime ? weatherTime.split(", ")[1] : "Недоступно";
-});
 
 interface WeatherBg {
   day: {
@@ -25,12 +13,10 @@ interface WeatherBg {
     [key: string]: string;
   };
 }
-
 interface WeatherDetail {
   [key: string]: string;
 }
-
-const weatherDetail: WeatherDetail = reactive({
+const WEATHER_DETAIL_TRANSLATE: WeatherDetail = {
   "clear sky": "ясное небо",
   "few clouds": "небольшая облачность",
   "scattered clouds": "облака с прояснениями",
@@ -38,6 +24,7 @@ const weatherDetail: WeatherDetail = reactive({
   "overcast clouds": "сплошная облачность",
 
   "light rain": "небольшой дождь",
+  "light intensity drizzle": "легкий моросящий дождь",
   "moderate rain": "умеренный дождь",
   "heavy intensity rain": "сильный дождь",
   "very heavy rain": "проливной дождь",
@@ -70,20 +57,18 @@ const weatherDetail: WeatherDetail = reactive({
   "thunderstorm with light drizzle": "гроза с легким моросящим дождем",
   "thunderstorm with drizzle": "гроза с моросящим дождем",
   "thunderstorm with heavy drizzle": "гроза с сильным моросящим дождем",
-
-  mist: "туман",
+  mist: "лёгкий туман",
   smoke: "дым",
-  haze: "дымка",
-  "sand/dust whirls": "песчаные/пыльные вихри",
-  fog: "туман",
+  haze: "дымка (атмосферная)",
+  sandDustWhirls: "Песчаные/пыльные вихри",
+  fog: "сильный туман",
   sand: "песок",
   dust: "пыль",
-  "volcanic ash": "вулканический пепел",
-  squalls: "шквалы",
+  volcanicAsh: "вулканический пепел",
+  squalls: "штормовые порывы ветра",
   tornado: "торнадо",
-});
-
-const weatherBg: WeatherBg = reactive({
+};
+const WEATHER_BACKGROUND: WeatherBg = {
   day: {
     "clear sky": "day_clear_sky.mp4",
     "few clouds": "day_few_clouds.mov",
@@ -92,6 +77,7 @@ const weatherBg: WeatherBg = reactive({
     "overcast clouds": "day_broken_clouds.mp4",
 
     "light rain": "day_rain.mp4",
+    "light intensity drizzle": "day_rain.mp4",
     "moderate rain": "day_rain.mp4",
     "heavy intensity rain": "day_rain.mp4",
     "very heavy rain": "day_shower_rain.mp4",
@@ -103,9 +89,9 @@ const weatherBg: WeatherBg = reactive({
     "ragged shower rain": "day_shower_rain.mp4",
 
     "light snow": "day_snow.mp4",
-    "snow": "day_snow.mp4",
+    snow: "day_snow.mp4",
     "heavy snow": "day_snow.mp4",
-    "sleet": "day_snow.mp4",
+    sleet: "day_snow.mp4",
     "light shower sleet": "day_thunderstorm.mp4",
     "shower sleet": "day_snow.mp4",
     "light rain and snow": "day_snow.mp4",
@@ -118,23 +104,23 @@ const weatherBg: WeatherBg = reactive({
     "thunderstorm with rain": "day_thunderstorm.mp4",
     "thunderstorm with heavy rain": "day_thunderstorm.mp4",
     "light thunderstorm": "day_thunderstorm.mp4",
-    "thunderstorm": "day_thunderstorm.mp4",
+    thunderstorm: "day_thunderstorm.mp4",
     "heavy thunderstorm": "day_thunderstorm.mp4",
     "ragged thunderstorm": "day_thunderstorm.mp4",
     "thunderstorm with light drizzle": "day_thunderstorm.mp4",
     "thunderstorm with drizzle": "day_thunderstorm.mp4",
     "thunderstorm with heavy drizzle": "day_thunderstorm.mp4",
 
-    "mist": "day_mist.mp4",
-    "smoke": "day_mist.mp4",
-    "haze": "day_mist.mp4",
+    mist: "day_mist.mp4",
+    smoke: "day_mist.mp4",
+    haze: "day_mist.mp4",
     "sand/dust whirls": "",
-    "fog": "",
-    "sand": "",
-    "dust": "",
+    fog: "day_mist.mp4",
+    sand: "",
+    dust: "",
     "volcanic ash": "",
-    "squalls": "",
-    "tornado": "",
+    squalls: "",
+    tornado: "",
   },
 
   night: {
@@ -145,6 +131,7 @@ const weatherBg: WeatherBg = reactive({
     "overcast clouds": "night_broken_clouds.mp4",
 
     "light rain": "night_rain.mp4",
+    "light intensity drizzle": "night_rain.mp4",
     "moderate rain": "night_rain.mp4",
     "heavy intensity rain": "night_rain.mp4",
     "very heavy rain": "night_shower_rain.mp4",
@@ -156,9 +143,9 @@ const weatherBg: WeatherBg = reactive({
     "ragged shower rain": "night_shower_rain.mp4",
 
     "light snow": "night_snow.mp4",
-    "snow": "night_snow.mp4",
+    snow: "night_snow.mp4",
     "heavy snow": "night_snow.mp4",
-    "sleet": "night_snow.mp4",
+    sleet: "night_snow.mp4",
     "light shower sleet": "night_snow.mp4",
     "shower sleet": "night_snow.mp4",
     "light rain and snow": "night_snow.mp4",
@@ -171,42 +158,60 @@ const weatherBg: WeatherBg = reactive({
     "thunderstorm with rain": "night_thunderstorm.mp4",
     "thunderstorm with heavy rain": "night_thunderstorm.mp4",
     "light thunderstorm": "night_thunderstorm.mp4",
-    "thunderstorm": "night_thunderstorm.mp4",
+    thunderstorm: "night_thunderstorm.mp4",
     "heavy thunderstorm": "night_thunderstorm.mp4",
     "ragged thunderstorm": "night_thunderstorm.mp4",
     "thunderstorm with light drizzle": "night_thunderstorm.mp4",
     "thunderstorm with drizzle": "night_thunderstorm.mp4",
     "thunderstorm with heavy drizzle": "night_thunderstorm.mp4",
 
-    "mist": "night_mist.mp4",
-    "smoke": "night_mist.mp4",
-    "haze": "night_mist.mp4",
+    mist: "night_mist.mp4",
+    smoke: "night_mist.mp4",
+    haze: "night_mist.mp4",
     "sand/dust whirls": "",
-    "fog": "",
-    "sand": "",
-    "dust": "",
+    fog: "night_mist.mp4",
+    sand: "",
+    dust: "",
     "volcanic ash": "",
-    "squalls": "",
-    "tornado": "",
+    squalls: "",
+    tornado: "",
   },
-});
+};
+
+const weather = useWeatherStore();
+
 
 const videoSrc = ref("");
 
+
+const date = computed((): string => {
+  const weatherTime = weather.time as string | undefined;
+  return weatherTime ? weatherTime.split(", ")[0] : "Недоступно";
+});
+const time = computed((): string => {
+  const weatherTime = weather.time as string | undefined;
+  return weatherTime ? weatherTime.split(", ")[1] : "Недоступно";
+});
+
+
 async function handleSubmit(city: string) {
+  weather.isLoading = true;
   await weather.fetchWeather(city);
+
   setVideoInVideoSrc();
-  console.log(weather.weatherData?.main?.humidity);
 }
 
 function setVideoInVideoSrc() {
   const weatherDescription: string | undefined =
     weather.weatherData?.weather[0]?.description;
+
   const isDaytime: string = weather.isDaytime;
 
   if (weatherDescription) {
     if (isDaytime === "day" || isDaytime === "night") {
-      videoSrc.value = `/video/${weatherBg[isDaytime][weatherDescription] || "not_data.mp4"}`;
+      videoSrc.value = `/video/${
+        WEATHER_BACKGROUND[isDaytime][weatherDescription] || "not_data.mp4"
+      }`;
     } else {
       videoSrc.value = "/video/not_data.mp4";
     }
@@ -218,77 +223,155 @@ function setVideoInVideoSrc() {
 function getDescriptionWeather() {
   const weatherDescription: string | undefined =
     weather.weatherData?.weather[0]?.description;
-  if (weatherDescription) {
-    return weatherDetail[weatherDescription];
+
+  if (weatherDescription && WEATHER_DETAIL_TRANSLATE[weatherDescription]) {
+    return WEATHER_DETAIL_TRANSLATE[weatherDescription];
   }
+
+  return "Описание отсутствует"; // Если weatherDescription не существует или значение в WEATHER_DETAIL_TRANSLATE отсутствует
 }
 
+
 onBeforeMount(async () => {
-  console.log("Компонент будет смонтирован запрос пошел!");
+  setVideoInVideoSrc();
   await weather.fetchWeather("Мичуринск");
+
+
+  // для теста приложения , коментим await weather.fetchWeather("Мичуринск"); 
+  // И используем для один из запросов ниже, также нужно поменять состояние в store в файле weatherStore.ts
+
+  // await weather.fetchWeather("1"); 
+  // await weather.fetchWeather("2");
+
   setVideoInVideoSrc();
 });
 </script>
 <template>
-  <div class="weather-app">
-    <div class="bg-video">
-      <video loop autoplay muted :src="videoSrc"></video>
-    </div>
+ 
+  <main>
+    <div class="weather-app">
+      <div class="bg-video">
+        <video loop autoplay muted :src="videoSrc"></video>
+      </div>
 
-    <a href="" class="weather-app__logo" :class="'text-' + weather.isDaytime">
-      AppWeather
-    </a>
+      <div v-if="weather.isLoading" class="weather-app__container-main">
+        <div class="weather-app__container-city-weather load">
+          Идет загрузка
+          <span class="loading-dots">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </span>
+        </div>
+        <div class="bg-video">
+          <video loop autoplay muted :src="videoSrc"></video>
+        </div>
+      </div>
 
-    <div v-if="weather.error" class="weather-app__container-main">
-      {{ weather.error }}
-    </div>
-    <div v-else class="weather-app__container-main">
-      <div class="weather-app__date-time" :class="'text-' + weather.isDaytime">
-        <div>Дата {{ date }}</div>
-        <div>Время {{ time }}</div>
+      <div v-else-if="weather.error" class="weather-app__container-main">
+        {{ weather.error }}
       </div>
-      <div class="weather-app__container-city-weather">
-        <div class="weather-app__name-city" :class="'text-' + weather.isDaytime">
-          {{ weather.weatherData?.name }}
-        </div>
-        <div class="weather-app__temp" :class="'text-' + weather.isDaytime">
-          {{
-            weather.weatherData?.main?.temp &&
-            Math.round(weather.weatherData?.main?.temp)
-          }}
-          °C
-        </div>
-      </div>
-    </div>
 
-    <div class="weather-app__detail-container detail-container">
-      <div v-if="getDescriptionWeather()" class="detail-container__description description">
-        <div class="description__text">
-          {{ getDescriptionWeather() }}
+      <div v-else class="weather-app__container-main">
+        <div
+          class="weather-app__date-time"
+          :class="'text-' + weather.isDaytime"
+        >
+          <div>Дата {{ date }}</div>
+          <div>Время {{ time }}</div>
         </div>
-        <div class="description__img">
-          <img :src="'https://openweathermap.org/img/wn/' +
-            weather.weatherData?.weather[0]?.icon +
-            '.png'
-            " alt="картинка погоды" />
+        <div class="weather-app__container-city-weather">
+          <div
+            class="weather-app__name-city"
+            :class="'text-' + weather.isDaytime"
+          >
+            {{ weather.weatherData?.name }}
+          </div>
+          <div class="weather-app__temp" :class="'text-' + weather.isDaytime">
+            {{
+              weather.weatherData?.main?.temp &&
+              Math.round(weather.weatherData?.main?.temp)
+            }}
+            °C
+          </div>
         </div>
       </div>
-      <div class="detail-container__data-weather">
-        <AppInfo @submit="handleSubmit" :temp="weather.weatherData?.main?.temp"
-          :feels_like="weather.weatherData?.main?.feels_like" :pressure="weather.pressureMmHg"
-          :gusts_of_wind="weather.weatherData?.wind?.gust" :humidity="weather.weatherData?.main?.humidity"
-          :error="weather.error" />
-      </div>
-      <div v-if="weather.weatherData?.main?.humidity" class="detail-container__diagram-humidity diagram-humidity">
-        <div class="diagram-humidity__title">Влажность</div>
-        <AppDiagram :percent="weather.weatherData?.main?.humidity" />
+      <div
+        v-if="!weather.isLoading"
+        class="weather-app__detail-container detail-container"
+      >
+        <div
+          v-if="getDescriptionWeather()"
+          class="detail-container__description description"
+        >
+          <div class="description__text">
+            {{ getDescriptionWeather() }}
+          </div>
+          <div class="description__img">
+            <img
+              :src="
+                'https://openweathermap.org/img/wn/' +
+                weather.weatherData?.weather[0]?.icon +
+                '.png'
+              "
+              alt="картинка погоды"
+            />
+          </div>
+        </div>
+        <div class="detail-container__data-weather">
+          <AppInfo
+            @submit="handleSubmit"
+            :temp="weather.weatherData?.main?.temp"
+            :feels_like="weather.weatherData?.main?.feels_like"
+            :pressure="weather.pressureMmHg"
+            :gusts_of_wind="weather.weatherData?.wind?.gust"
+            :humidity="weather.weatherData?.main?.humidity"
+            :error="weather.error"
+          />
+        </div>
+        <div
+          v-if="weather.weatherData?.main?.humidity"
+          class="detail-container__diagram-humidity diagram-humidity"
+        >
+          <div class="diagram-humidity__title">Влажность</div>
+          <AppDiagram :percent="weather.weatherData?.main?.humidity" />
+        </div>
       </div>
     </div>
-  </div>
+  </main>
+  <footer class="footer">
+    <p :class="'text-' + weather.isDaytime">
+      Все права защищены © 2025 MichDev
+    </p>
+    <p :class="'text-' + weather.isDaytime">
+      Контакты: телеграмм
+      <a
+        :class="'text-' + weather.isDaytime"
+        href="https://t.me/vlad_mich"
+        target="_blank"
+        >@vlad_mich</a
+      >, почта
+      <a :class="'text-' + weather.isDaytime" href="mailto:sotto36623@yandex.ru"
+        >sotto36623@yandex.ru</a
+      >
+    </p>
+  </footer>
 </template>
 
 <style lang="scss">
 @use "@/assets/scss/mediaMixins.scss";
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255, 228, 196, 0.745);
+  padding: 10px;
+
+  @include mediaMixins.max_767 {
+    position: initial;
+  }
+}
 
 .weather-app {
   display: flex;
@@ -297,22 +380,6 @@ onBeforeMount(async () => {
 
   @include mediaMixins.max_767 {
     flex-direction: column;
-  }
-
-  &__logo {
-    padding: 20px;
-    position: fixed;
-    background-color: rgba(250, 235, 215, 0.49);
-    border: solid white 1px;
-    -webkit-box-shadow: 0px 0px 8px 19px rgba(34, 60, 80, 0.2) inset;
-    -moz-box-shadow: 0px 0px 8px 19px rgba(34, 60, 80, 0.2) inset;
-    box-shadow: 0px 0px 8px 19px rgba(34, 60, 80, 0.2) inset;
-    font-size: 40px;
-
-    @include mediaMixins.max_767 {
-      font-size: 30px;
-      padding: 10px;
-    }
   }
 
   &__container-main {
@@ -373,11 +440,9 @@ onBeforeMount(async () => {
   display: grid;
 
   &__description {
-
     @include mediaMixins.max_767 {
       order: 3;
     }
-
   }
 
   &__data-weather {
@@ -422,7 +487,6 @@ onBeforeMount(async () => {
   }
 
   &__img {
-
     padding: 10px;
     background-color: rgba(0, 195, 255, 0.1);
 
@@ -431,7 +495,6 @@ onBeforeMount(async () => {
     }
   }
 }
-
 
 .diagram-humidity {
   &__title {
@@ -443,7 +506,6 @@ onBeforeMount(async () => {
     }
   }
 }
-
 
 .bg-video {
   position: fixed;
@@ -466,5 +528,49 @@ onBeforeMount(async () => {
 
 .text-day {
   color: black;
+}
+
+.load {
+  background-color: rgba(255, 228, 196, 0.745);
+  padding: 20px 40px;
+  font-size: 40px;
+}
+
+.loading-dots {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin: 0 2px;
+  border-radius: 50%;
+  background-color: rgb(0, 0, 0);
+  animation: loading 1s infinite;
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes loading {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.5);
+  }
 }
 </style>

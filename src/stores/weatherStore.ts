@@ -1,15 +1,15 @@
 
 import { defineStore } from 'pinia';
 import { WeatherData } from '@/types/weatherTypes';
+const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
+const url = `http://api.openweathermap.org/data/2.5/weather?units=metric&appid=${apiKey}&q=`;
 
-const url: string = 'http://api.openweathermap.org/data/2.5/weather?units=metric&appid=b6f324df72e37836c19a9763df540c0d&q=';
 
 export const useWeatherStore = defineStore('weather', {
   state: () => ({
-    isLoading: false as boolean,
+    isLoading: true as boolean,
     weatherData: null as WeatherData | null,
     city: '' as string | null,
-
     error: null as string | null,
   }),
 
@@ -19,13 +19,13 @@ export const useWeatherStore = defineStore('weather', {
 
 
       try {
-        const response = await fetch(`${url}${city}`);
+        const response = await fetch(`${url}${city}`); // ЗАПРОС К API
         this.isLoading = true;
-        // const response = await fetch(`/data/weatherData_${city}.json`)
-        console.log(response);
+        // const response = await fetch(`/data/weatherData_${city}.json`); ИСПОЛЬЗУЕМ ДЛЯ ТЕСТА ПРИЛОЖЕНИЯ, 
+
 
         if (!response.ok) {
-          console.log(response.status);
+
 
           if (response.status === 400) {
             this.error = 'Город не найден. Проверьте название и попробуйте снова.';
@@ -39,9 +39,8 @@ export const useWeatherStore = defineStore('weather', {
 
         const data = await response.json() as WeatherData;
         this.weatherData = data;
-    
         this.city = data.name;
-
+        
 
       } catch (error) {
         console.error('Ошибка при выполнении запроса:', error);
@@ -49,7 +48,7 @@ export const useWeatherStore = defineStore('weather', {
           this.error = 'Не удалось выполнить запрос. Проверьте подключение к интернету.';
         }
         console.log(this.error);
-        
+
         this.clearWeather();
       } finally {
         this.isLoading = false
@@ -91,20 +90,20 @@ export const useWeatherStore = defineStore('weather', {
       return state.weatherData && state.weatherData.main?.pressure !== undefined ?
         Math.round(state.weatherData.main?.pressure * 0.750061683) : null
     },
-    
+
     time(state): string {
       if (state.weatherData && state.weatherData.timezone !== undefined) {
-        
+
         const currentTimeUTC: number = Date.now();
         const timezoneOffset: number = state.weatherData.timezone * 1000;
         const timestamp = currentTimeUTC + timezoneOffset;
         const date = new Date(timestamp);
-       
+
         return date.toLocaleString('ru-RU', { timeZone: 'UTC' });
       } else {
         return "Время в этом регионе недоступно";
       }
     }
-    
+
   },
 });

@@ -2,11 +2,43 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/png" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Vue + TS</title>
-  </head>
+    <title>AppWeather — Приложение для прогноза погоды | Weather App</title>
+    
+    <!-- Мета-описание на двух языках -->
+    <meta name="description" content="AppWeather — интерактивное приложение погоды с видеофоном. Узнайте текущую погоду и прогноз в вашем городе в режиме реального времени. / AppWeather is an interactive weather app with a video background. Get the current weather and forecast for your city in real-time!" />
+    
+    <!-- Ключевые слова -->
+    <meta name="keywords" content="погода, прогноз погоды, интерактивное приложение, погода онлайн, видеофон, приложение для погоды, текущая погода, weather, weather app, weather forecast, real-time weather" />
+
+    <!-- Автор приложения -->
+    <meta name="author" content="Vlad Halimov" />
+
+    <!-- Описание для Open Graph -->
+    <meta property="og:title" content="AppWeather — Приложение для прогноза погоды | Weather App" />
+    <meta property="og:description" content="AppWeather — интерактивное приложение погоды с видеофоном. Узнайте текущую погоду и прогноз в вашем городе в режиме реального времени. / AppWeather is an interactive weather app with a video background. Get the current weather and forecast for your city in real-time!" />
+    <meta property="og:image" content="/preview.png" /> <!-- Укажите путь к изображению превью -->
+    <meta property="og:url" content="http://appweather.ru" /> <!-- Укажите URL вашего сайта -->
+    <meta property="og:type" content="website" />
+
+    <!-- Описание для Twitter -->
+    <meta name="twitter:title" content="AppWeather — Приложение для прогноза погоды | Weather App" />
+    <meta name="twitter:description" content="AppWeather — интерактивное приложение погоды с видеофоном. Узнайте текущую погоду и прогноз в вашем городе в режиме реального времени. / AppWeather is an interactive weather app with a video background. Get the current weather and forecast for your city in real-time!" />
+    <meta name="twitter:image" content="/preview.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+</head>
+
   <body>
+    <header class="header">
+      <a href="/" class="header__logo">
+        AppWeather
+      </a>
+      <h1 style="font-size: 1px;opacity: 0;">AppWeather — Прогноз погоды с видеофоном для вашего города</h1>
+     
+      <h2 style="font-size: 1px;opacity: 0;">AppWeather — Interactive weather app with video background for your city</h2>
+    </header>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

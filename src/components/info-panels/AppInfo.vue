@@ -57,7 +57,6 @@ const focus = ref<boolean>(false);
   &__form {
     display: flex;
     flex-direction: column;
-
     width: 100%;
   }
 

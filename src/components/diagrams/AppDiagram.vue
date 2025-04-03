@@ -18,11 +18,11 @@ let currentPercent = 1; // Текущий процент для анимации
 
 // Функция для установки размеров canvas
 function setCanvasSize() {
-  console.log('Setting canvas size'); 
+  
   if (canvas.value) {
     const width =  window.innerWidth < 768 ? 100 : 200;
     const height = width;
-    console.log(window.innerWidth);
+    
     
     
     canvas.value.width = width  
