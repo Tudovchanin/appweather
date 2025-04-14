@@ -1,0 +1,57 @@
+interface WeatherDetail {
+  [key: string]: string;
+}
+
+
+export const WEATHER_DETAIL_TRANSLATE: WeatherDetail = {
+  "clear sky": "ясное небо",
+  "few clouds": "небольшая облачность",
+  "scattered clouds": "облака с прояснениями",
+  "broken clouds": "облачность",
+  "overcast clouds": "сплошная облачность",
+
+  "light rain": "небольшой дождь",
+  "light intensity drizzle": "легкий моросящий дождь",
+  "moderate rain": "умеренный дождь",
+  "heavy intensity rain": "сильный дождь",
+  "very heavy rain": "проливной дождь",
+  "extreme rain": "проливной дождь",
+  "freezing rain": "ледяной дождь",
+  "light intensity shower rain": "небольшой ливень",
+  "shower rain": "ливень",
+  "heavy intensity shower rain": "сильный ливень",
+  "ragged shower rain": "ливень с перерывами",
+
+  "light snow": "небольшой снег",
+  snow: "снег",
+  "heavy snow": "сильный снег",
+  sleet: "дождь со снегом",
+  "light shower sleet": "небольшой дождь со снегом",
+  "shower sleet": "ливень со снегом",
+  "light rain and snow": "небольшой дождь и снег",
+  "rain and snow": "дождь и снег",
+  "light shower snow": "небольшой снегопад",
+  "shower snow": "снегопад",
+  "heavy shower snow": "сильный снегопад",
+
+  "thunderstorm with light rain": "гроза с небольшим дождем",
+  "thunderstorm with rain": "гроза с дождем",
+  "thunderstorm with heavy rain": "гроза с сильным дождем",
+  "light thunderstorm": "легкая гроза",
+  thunderstorm: "гроза",
+  "heavy thunderstorm": "сильная гроза",
+  "ragged thunderstorm": "разрозненная гроза",
+  "thunderstorm with light drizzle": "гроза с легким моросящим дождем",
+  "thunderstorm with drizzle": "гроза с моросящим дождем",
+  "thunderstorm with heavy drizzle": "гроза с сильным моросящим дождем",
+  mist: "лёгкий туман",
+  smoke: "дым",
+  haze: "дымка (атмосферная)",
+  sandDustWhirls: "Песчаные/пыльные вихри",
+  fog: "сильный туман",
+  sand: "песок",
+  dust: "пыль",
+  volcanicAsh: "вулканический пепел",
+  squalls: "штормовые порывы ветра",
+  tornado: "торнадо",
+};

@@ -3,186 +3,12 @@ import { ref, onBeforeMount, reactive, computed } from "vue";
 import { useWeatherStore } from "@/stores/weatherStore";
 import AppInfo from "@/components/info-panels/AppInfo.vue";
 import AppDiagram from "@/components/diagrams/AppDiagram.vue";
-
-
-interface WeatherBg {
-  day: {
-    [key: string]: string;
-  };
-  night: {
-    [key: string]: string;
-  };
-}
-interface WeatherDetail {
-  [key: string]: string;
-}
-const WEATHER_DETAIL_TRANSLATE: WeatherDetail = {
-  "clear sky": "ясное небо",
-  "few clouds": "небольшая облачность",
-  "scattered clouds": "облака с прояснениями",
-  "broken clouds": "облачность",
-  "overcast clouds": "сплошная облачность",
-
-  "light rain": "небольшой дождь",
-  "light intensity drizzle": "легкий моросящий дождь",
-  "moderate rain": "умеренный дождь",
-  "heavy intensity rain": "сильный дождь",
-  "very heavy rain": "проливной дождь",
-  "extreme rain": "проливной дождь",
-  "freezing rain": "ледяной дождь",
-  "light intensity shower rain": "небольшой ливень",
-  "shower rain": "ливень",
-  "heavy intensity shower rain": "сильный ливень",
-  "ragged shower rain": "ливень с перерывами",
-
-  "light snow": "небольшой снег",
-  snow: "снег",
-  "heavy snow": "сильный снег",
-  sleet: "дождь со снегом",
-  "light shower sleet": "небольшой дождь со снегом",
-  "shower sleet": "ливень со снегом",
-  "light rain and snow": "небольшой дождь и снег",
-  "rain and snow": "дождь и снег",
-  "light shower snow": "небольшой снегопад",
-  "shower snow": "снегопад",
-  "heavy shower snow": "сильный снегопад",
-
-  "thunderstorm with light rain": "гроза с небольшим дождем",
-  "thunderstorm with rain": "гроза с дождем",
-  "thunderstorm with heavy rain": "гроза с сильным дождем",
-  "light thunderstorm": "легкая гроза",
-  thunderstorm: "гроза",
-  "heavy thunderstorm": "сильная гроза",
-  "ragged thunderstorm": "разрозненная гроза",
-  "thunderstorm with light drizzle": "гроза с легким моросящим дождем",
-  "thunderstorm with drizzle": "гроза с моросящим дождем",
-  "thunderstorm with heavy drizzle": "гроза с сильным моросящим дождем",
-  mist: "лёгкий туман",
-  smoke: "дым",
-  haze: "дымка (атмосферная)",
-  sandDustWhirls: "Песчаные/пыльные вихри",
-  fog: "сильный туман",
-  sand: "песок",
-  dust: "пыль",
-  volcanicAsh: "вулканический пепел",
-  squalls: "штормовые порывы ветра",
-  tornado: "торнадо",
-};
-const WEATHER_BACKGROUND: WeatherBg = {
-  day: {
-    "clear sky": "day_clear_sky.mp4",
-    "few clouds": "day_few_clouds.mov",
-    "scattered clouds": "day_scattered_clouds.mp4",
-    "broken clouds": "day_broken_clouds.mp4",
-    "overcast clouds": "day_broken_clouds.mp4",
-
-    "light rain": "day_rain.mp4",
-    "light intensity drizzle": "day_rain.mp4",
-    "moderate rain": "day_rain.mp4",
-    "heavy intensity rain": "day_rain.mp4",
-    "very heavy rain": "day_shower_rain.mp4",
-    "extreme rain": "day_shower_rain.mp4",
-    "freezing rain": "day_rain.mp4",
-    "light intensity shower rain": "day_shower_rain.mp4",
-    "shower rain": "day_shower_rain.mp4",
-    "heavy intensity shower rain": "day_shower_rain.mp4",
-    "ragged shower rain": "day_shower_rain.mp4",
-
-    "light snow": "day_snow.mp4",
-    snow: "day_snow.mp4",
-    "heavy snow": "day_snow.mp4",
-    sleet: "day_snow.mp4",
-    "light shower sleet": "day_thunderstorm.mp4",
-    "shower sleet": "day_snow.mp4",
-    "light rain and snow": "day_snow.mp4",
-    "rain and snow": "day_snow.mp4",
-    "light shower snow": "day_snow.mp4",
-    "shower snow": "day_snow.mp4",
-    "heavy shower snow": "day_snow.mp4",
-
-    "thunderstorm with light rain": "day_thunderstorm.mp4",
-    "thunderstorm with rain": "day_thunderstorm.mp4",
-    "thunderstorm with heavy rain": "day_thunderstorm.mp4",
-    "light thunderstorm": "day_thunderstorm.mp4",
-    thunderstorm: "day_thunderstorm.mp4",
-    "heavy thunderstorm": "day_thunderstorm.mp4",
-    "ragged thunderstorm": "day_thunderstorm.mp4",
-    "thunderstorm with light drizzle": "day_thunderstorm.mp4",
-    "thunderstorm with drizzle": "day_thunderstorm.mp4",
-    "thunderstorm with heavy drizzle": "day_thunderstorm.mp4",
-
-    mist: "day_mist.mp4",
-    smoke: "day_mist.mp4",
-    haze: "day_mist.mp4",
-    "sand/dust whirls": "",
-    fog: "day_mist.mp4",
-    sand: "",
-    dust: "",
-    "volcanic ash": "",
-    squalls: "",
-    tornado: "",
-  },
-
-  night: {
-    "clear sky": "night_clear_sky.mp4",
-    "few clouds": "night_few_clouds.mp4",
-    "scattered clouds": "night_scattered_clouds.mp4",
-    "broken clouds": "night_broken_clouds.mp4",
-    "overcast clouds": "night_broken_clouds.mp4",
-
-    "light rain": "night_rain.mp4",
-    "light intensity drizzle": "night_rain.mp4",
-    "moderate rain": "night_rain.mp4",
-    "heavy intensity rain": "night_rain.mp4",
-    "very heavy rain": "night_shower_rain.mp4",
-    "extreme rain": "night_shower_rain.mp4",
-    "freezing rain": "night_shower_rain.mp4",
-    "light intensity shower rain": "night_shower_rain.mp4",
-    "shower rain": "night_shower_rain.mp4",
-    "heavy intensity shower rain": "night_shower_rain.mp4",
-    "ragged shower rain": "night_shower_rain.mp4",
-
-    "light snow": "night_snow.mp4",
-    snow: "night_snow.mp4",
-    "heavy snow": "night_snow.mp4",
-    sleet: "night_snow.mp4",
-    "light shower sleet": "night_snow.mp4",
-    "shower sleet": "night_snow.mp4",
-    "light rain and snow": "night_snow.mp4",
-    "rain and snow": "night_snow.mp4",
-    "light shower snow": "night_snow.mp4",
-    "shower snow": "night_snow.mp4",
-    "heavy shower snow": "night_snow.mp4",
-
-    "thunderstorm with light rain": "night_thunderstorm.mp4",
-    "thunderstorm with rain": "night_thunderstorm.mp4",
-    "thunderstorm with heavy rain": "night_thunderstorm.mp4",
-    "light thunderstorm": "night_thunderstorm.mp4",
-    thunderstorm: "night_thunderstorm.mp4",
-    "heavy thunderstorm": "night_thunderstorm.mp4",
-    "ragged thunderstorm": "night_thunderstorm.mp4",
-    "thunderstorm with light drizzle": "night_thunderstorm.mp4",
-    "thunderstorm with drizzle": "night_thunderstorm.mp4",
-    "thunderstorm with heavy drizzle": "night_thunderstorm.mp4",
-
-    mist: "night_mist.mp4",
-    smoke: "night_mist.mp4",
-    haze: "night_mist.mp4",
-    "sand/dust whirls": "",
-    fog: "night_mist.mp4",
-    sand: "",
-    dust: "",
-    "volcanic ash": "",
-    squalls: "",
-    tornado: "",
-  },
-};
+import { WEATHER_BACKGROUND } from "./constants/background";
+import { WEATHER_DETAIL_TRANSLATE } from "./constants/translate";
 
 const weather = useWeatherStore();
 
-
 const videoSrc = ref("");
-
 
 const date = computed((): string => {
   const weatherTime = weather.time as string | undefined;
@@ -219,7 +45,6 @@ function setVideoInVideoSrc() {
     videoSrc.value = "/video/not_data.mp4";
   }
 }
-
 function getDescriptionWeather() {
   const weatherDescription: string | undefined =
     weather.weatherData?.weather[0]?.description;
@@ -236,9 +61,8 @@ onBeforeMount(async () => {
   setVideoInVideoSrc();
   await weather.fetchWeather("Мичуринск");
 
-
   // для теста приложения , коментим await weather.fetchWeather("Мичуринск"); 
-  // И используем для один из запросов ниже, также нужно поменять состояние в store в файле weatherStore.ts
+  // И используем один из запросов ниже, также нужно поменять состояние в store в файле weatherStore.ts
 
   // await weather.fetchWeather("1"); 
   // await weather.fetchWeather("2");
